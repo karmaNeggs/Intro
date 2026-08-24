@@ -68,9 +68,11 @@
   @media (max-width:960px){.shell{grid-template-columns:1fr;gap:3rem;}}
 
   /* ---------- rail ---------- */
-  /* Not sticky: the rail is taller than most viewports, and a sticky element
-     taller than the viewport pins in place — which reads as "scrolling is broken"
-     when the pointer is over it. Static keeps both columns scrolling together. */
+  /* Static by default. The script below upgrades this to a bottom-anchored
+     sticky: the rail scrolls through its own content, then holds once its
+     bottom reaches the viewport bottom, while the right column keeps going.
+     Left static as the fallback so a script failure can never reintroduce
+     the "scrolling looks frozen" bug. */
   .rail{display:flex;flex-direction:column;gap:1.75rem;}
 
   .eyebrow{
@@ -586,6 +588,41 @@
     </div>
   </div>
 </main>
+
+<script>
+/* Bottom-anchored sticky rail.
+   A sticky element with a NEGATIVE top scrolls up with the page until its
+   bottom edge meets the viewport bottom, then holds. Because that offset
+   depends on the rail's rendered height, it has to be measured, not guessed. */
+(function () {
+  var rail = document.querySelector('.rail');
+  if (!rail) return;
+
+  var GAP = 24;          // breathing room at the stuck edge
+  var narrow = window.matchMedia('(max-width: 960px)');
+
+  function place() {
+    if (narrow.matches) {           // single column: no sticking
+      rail.style.position = 'static';
+      rail.style.top = 'auto';
+      return;
+    }
+    rail.style.position = 'sticky';
+    var vh = window.innerHeight;
+    var h  = rail.offsetHeight;
+    rail.style.top = (h > vh - GAP * 2)
+      ? (vh - h - GAP) + 'px'       // taller than viewport: anchor its bottom
+      : GAP + 'px';                 // shorter: ordinary top pin
+  }
+
+  place();
+  window.addEventListener('resize', place);
+  window.addEventListener('load', place);
+  if (narrow.addEventListener) narrow.addEventListener('change', place);
+  // Web fonts change the rail's height after first paint.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+})();
+</script>
 
 </body>
 </html>
