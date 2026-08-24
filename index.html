@@ -7,7 +7,7 @@
 <meta name="description" content="Anupam Vashist — data journalist & ex-analytics leader. Investigations built on auditable method, essays, music, sketching and poetry.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&display=swap" rel="stylesheet">
 <style>
   :root{
     --ground:#0a0b0d;
@@ -29,22 +29,27 @@
     --signal-hot:#ff5c8c;
     --signal-dim:#a3204a;
 
-    --display:'Libre Franklin',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
-    --body:'Newsreader',ui-serif,Georgia,'Times New Roman',serif;
-    --mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    /* Recursive: one variable family, code-flavoured throughout.
+       MONO 1 = monospaced, CASL 1 = the casual/hand-drawn cut. */
+    --display:'Recursive',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --body:'Recursive',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --mono:'Recursive',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+    --vf-code:'MONO' 1,'CASL' 1,'CRSV' 0,'slnt' 0;
   }
 
   *,*::before,*::after{box-sizing:border-box;}
   html{background:var(--ground);-webkit-text-size-adjust:100%;}
   body{
     margin:0;background:var(--ground);color:var(--text-2);
-    font-family:var(--body);font-size:17px;line-height:1.62;
+    font-family:var(--body);font-size:15.5px;line-height:1.66;
+    font-variation-settings:var(--vf-code);
     -webkit-font-smoothing:antialiased;
   }
   ::selection{background:var(--signal-dim);color:#fff;}
   a{color:inherit;}
   img{max-width:100%;display:block;}
-  h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em;}
+  /* monospace is already wide — no negative tracking, and let it inherit the casual axis */
+  h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em;font-variation-settings:var(--vf-code);}
   p{margin:0;}
   ul{margin:0;padding:0;list-style:none;}
   a:focus-visible{outline:2px solid var(--signal);outline-offset:3px;}
@@ -94,15 +99,11 @@
   .portrait-img{
     position:relative;width:100%;aspect-ratio:4/5;
     /* no frame: the image dissolves into the page ground */
-    /* wider ellipse = gentler side fade; shorter ellipse = stronger top/bottom fade */
+    /* fade the left and right edges only; top and bottom stay square */
     -webkit-mask-image:
-      radial-gradient(ellipse 92% 80% at 50% 46%, #000 0%, #000 76%, rgba(0,0,0,.82) 88%, transparent 100%),
-      linear-gradient(to bottom, transparent 0%, #000 11%, #000 87%, transparent 100%);
-    -webkit-mask-composite:source-in;
+      linear-gradient(to right, transparent 0%, #000 19%, #000 81%, transparent 100%);
     mask-image:
-      radial-gradient(ellipse 92% 80% at 50% 46%, #000 0%, #000 76%, rgba(0,0,0,.82) 88%, transparent 100%),
-      linear-gradient(to bottom, transparent 0%, #000 11%, #000 87%, transparent 100%);
-    mask-composite:intersect;
+      linear-gradient(to right, transparent 0%, #000 19%, #000 81%, transparent 100%);
   }
   .portrait-img img{
     width:100%;height:100%;object-fit:cover;
