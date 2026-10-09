@@ -1,6 +1,9 @@
 # Personal notes — never publish
 info.txt
 
+# Internal status notes never go to GitHub (core rule, root ../CLAUDE.md)
+CLAUDE.md
+
 # Source asset (already embedded as a data URI in index.html)
 *.png
 
